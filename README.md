@@ -3,3 +3,487 @@ InfosysInternship
 
 # To see the output [CLICK HERE](https://omkarrenuse.github.io/JavaKeywordExtraction/Infosysinternship/Extract.ipynb)
 
+# op[click]({
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "87df54d1",
+   "metadata": {},
+   "source": [
+    "### Import Packages"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "5ef83cc6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import re\n",
+    "import pandas as pd"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "be32f4a4",
+   "metadata": {},
+   "source": [
+    "### Import Dataset and Code File"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "3b8e40e8",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>Keyword</th>\n",
+       "      <th>Tagging</th>\n",
+       "      <th>Description</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>abstract class</td>\n",
+       "      <td>key</td>\n",
+       "      <td>Create an abstract class</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>abstract type method()</td>\n",
+       "      <td>key</td>\n",
+       "      <td>Create an abstract method with a specific retu...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>assert</td>\n",
+       "      <td>key</td>\n",
+       "      <td>Keyword used to Debug</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>boolean</td>\n",
+       "      <td>key</td>\n",
+       "      <td>Create a data type that can hold True and Fals...</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>break</td>\n",
+       "      <td>key</td>\n",
+       "      <td>Create a control statement for breaking out of...</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "                  Keyword Tagging  \\\n",
+       "0          abstract class     key   \n",
+       "1  abstract type method()     key   \n",
+       "2                  assert     key   \n",
+       "3                 boolean     key   \n",
+       "4                   break     key   \n",
+       "\n",
+       "                                         Description  \n",
+       "0                           Create an abstract class  \n",
+       "1  Create an abstract method with a specific retu...  \n",
+       "2                              Keyword used to Debug  \n",
+       "3  Create a data type that can hold True and Fals...  \n",
+       "4  Create a control statement for breaking out of...  "
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "#Import Dataset\n",
+    "df = pd.read_excel(\"Dataset.xlsx\")\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "1c4558f5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Input the Java Program File with extension\n",
+      "FirstProgram.txt\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Import Java Program File\n",
+    "print(\"Input the Java Program File with extension\")\n",
+    "path = input()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "65d09b5e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "import java.util.*;\n",
+      "import java.lang.*;\n",
+      "\n",
+      "class Main {\n",
+      "\n",
+      "  public static void main(String[] args) {\n",
+      "    \n",
+      "    System.out.println(\"Enter two numbers\");\n",
+      "    int first = 10;\n",
+      "    int second = 20;\n",
+      "    \n",
+      "    System.out.println(first + \" \" + second);\n",
+      "\n",
+      "    // add two numbers\n",
+      "    int sum = first + second;\n",
+      "    System.out.println(\"The sum is: \" + sum);\n",
+      "  }\n",
+      "}\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Read the Code File\n",
+    "with open(path, 'r') as f:\n",
+    "    contents=f.read()\n",
+    "    print(contents)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "074b6ec1",
+   "metadata": {},
+   "source": [
+    "### \"Imports\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "364fa92a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "java.util.*;\n",
+      "java.lang.*;\n"
+     ]
+    }
+   ],
+   "source": [
+    "pkg1 = []\n",
+    "\n",
+    "#Get the import libraries\n",
+    "pattern0 = re.compile(r'(import)\\s([a-zA-Z0-9.*;]+)')\n",
+    "pkg = pattern0.finditer(contents)\n",
+    "\n",
+    "for pkg in pkg:\n",
+    "        print(pkg.group(2)) \n",
+    "        pkg1.append(pkg.group(2))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "0e8e6a63",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['Contains the collections framework, legacy collection classes, event model, date and time facilities, internationalization, and miscellaneous utility classes (a string tokenizer, a random-number generator, and a bit array).']\n",
+      "['Provides classes that are fundamental to the design of the Java programming language.']\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Get the names of the packages in the required format\n",
+    "import_list = [s.replace(\".*;\", \"\") for s in pkg1]\n",
+    "\n",
+    "#Print the equivalent Description\n",
+    "key = df['Keyword']\n",
+    "\n",
+    "for i in import_list:\n",
+    "    result = df['Description'][df[key == i].index.tolist()].tolist()\n",
+    "    print(result)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "31955123",
+   "metadata": {},
+   "source": [
+    "### \"Class Names and Main Function\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "9cb32a1e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "class Main\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Get the Class keyword and the Class Name\n",
+    "CLassMatch1 = []\n",
+    "\n",
+    "pattern1 = re.compile(r'(class)\\s([A-Za-z]\\w+)')\n",
+    "ClassMatches = pattern1.finditer(contents)\n",
+    "\n",
+    "for CLassMatch in ClassMatches:\n",
+    "        print (CLassMatch.group(0)) \n",
+    "        CLassMatch1.append(CLassMatch.group(2))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "5ce17034",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "public static void main\n"
+     ]
+    }
+   ],
+   "source": [
+    "pattern2 = re.compile(r'public static void main')\n",
+    "MainFunc = pattern2.finditer(contents)\n",
+    "for MainFunc in MainFunc:\n",
+    "        print (MainFunc.group(0))   "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bf4b6de6",
+   "metadata": {},
+   "source": [
+    "### \"Data Types\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "90bcf161",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "int first\n",
+      "int second\n",
+      "int sum\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Get the Variable Names\n",
+    "pattern3 =re.compile(r'(int|float|double|long|short)\\s([A-Za-z]\\s?\\w*)')\n",
+    "VarMatches = pattern3.finditer(contents)\n",
+    "\n",
+    "for VarMatch in VarMatches:\n",
+    "        print (VarMatch.group(0)) \n",
+    "        #print(type(VarMatch[0]))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "e63db11f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "first\n",
+      "second\n",
+      "sum\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Get the names of the variables\n",
+    "VarMatches = pattern3.finditer(contents)\n",
+    "\n",
+    "for VarMatch in VarMatches:\n",
+    "        print(VarMatch.group(2)) \n",
+    "        #print(type(VarMatch[0]))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f6b4eae5",
+   "metadata": {},
+   "source": [
+    "### \"Method Names\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "543a97e1",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      ".println(\n",
+      ".println(\n",
+      ".println(\n"
+     ]
+    }
+   ],
+   "source": [
+    "pattern4 = re.compile(r'(default|public|protected|private|static|new|\\.)\\s?(int|float|double|long|short|boolean|void)?\\s?(?!main)\\w*\\((w*?)')\n",
+    "MethodMatches = pattern4.finditer(contents)\n",
+    "MethodMatch1=[]\n",
+    "\n",
+    "for MethodMatch in MethodMatches:\n",
+    "        #print (MethodMatch)  \n",
+    "        print (MethodMatch.group(0)) \n",
+    "        MethodMatch1.append(MethodMatch.group(2))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9225f328",
+   "metadata": {},
+   "source": [
+    "## Code"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b39b5d17",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "pkg1 = []\n",
+    "CLassMatch1 = []\n",
+    "MethodMatch1=[]\n",
+    "\n",
+    "#Get the import libraries\n",
+    "pattern0 = re.compile(r'(import)\\s([a-zA-Z0-9.*;]+)')\n",
+    "pkg = pattern0.finditer(contents)\n",
+    "for pkg in pkg:\n",
+    "        print(pkg.group(2)) \n",
+    "        pkg1.append(pkg.group(2))\n",
+    "        \n",
+    "#Get the names of the packages in the required format\n",
+    "import_list = [s.replace(\".*;\", \"\") for s in pkg1]\n",
+    "\n",
+    "#Print the equivalent Description\n",
+    "key = df['Keyword']\n",
+    "\n",
+    "for i in import_list:\n",
+    "    result = df['Description'][df[key == i].index.tolist()].tolist()\n",
+    "    print(result)\n",
+    "    \n",
+    "#Patterns\n",
+    "pattern1 = re.compile(r'(class)\\s([A-Za-z]\\w+)')\n",
+    "ClassMatches = pattern1.finditer(contents)\n",
+    "pattern2 = re.compile(r'public static void main')\n",
+    "MainFunc = pattern2.finditer(contents)\n",
+    "pattern3 =re.compile(r'(int|float|double|long|short)\\s([A-Za-z]\\s?\\w*)')\n",
+    "VarMatches = pattern3.finditer(contents)\n",
+    "pattern4 = re.compile(r'(default|public|protected|private|static|new|\\.)\\s?(int|float|double|long|short|boolean|void)?\\s?(?!main)\\w*\\((w*?)')\n",
+    "MethodMatches = pattern4.finditer(contents)\n",
+    "\n",
+    "\n",
+    "for CLassMatch in ClassMatches:\n",
+    "        print (CLassMatch.group(0)) \n",
+    "        CLassMatch1.append(CLassMatch.group(2))       \n",
+    "        for MainFunc in MainFunc:\n",
+    "            print (MainFunc.group(0))   \n",
+    "        \n",
+    "#Get the Variable Names\n",
+    "\n",
+    "\n",
+    "for VarMatch in VarMatches:\n",
+    "        print (VarMatch.group(0)) \n",
+    "        #print(type(VarMatch[0]))\n",
+    "        \n",
+    "\n",
+    "\n",
+    "for MethodMatch in MethodMatches:\n",
+    "        #print (MethodMatch)  \n",
+    "        print (MethodMatch.group(0)) \n",
+    "        MethodMatch1.append(MethodMatch.group(2))"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+})
